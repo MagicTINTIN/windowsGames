@@ -29,6 +29,6 @@ FILE(GLOB SRC_FILES src/**.c src/**.cc src/**.cpp)
 
 add_library(glad dependencies/glad/glad.c)
 
-add_executable(${CMAKE_PROJECT_NAME} src/main.c)
+add_executable(${CMAKE_PROJECT_NAME} src/main.cc)
 target_link_libraries(${CMAKE_PROJECT_NAME} glad glfw)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${SRC_FILES})
