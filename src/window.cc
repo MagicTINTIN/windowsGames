@@ -84,8 +84,10 @@ void Window::fall()
     while (posY < floor)
     {
         posY+=speed;
+        if (posY >= floor) posY = floor;
         // printf("%d %d\n", posY, floor);
         glfwSetWindowPos(window, posX, posY);
         usleep(1000000 / 50);
+        speed+=2;
     }
 }
