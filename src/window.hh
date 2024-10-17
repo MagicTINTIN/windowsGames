@@ -19,6 +19,7 @@ private:
     std::vector<Window> otherWindows;
 public:
     GLFWwindow* getWindow();
+    Window();
     Window(std::vector<Window> &otherWindows, int size, int screenW, int screenH, int speed);
     ~Window();
     void horizontalMove();

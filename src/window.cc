@@ -1,15 +1,20 @@
 #include "window.hh"
+#include <unistd.h>
 
 void error_callback(int error, const char *description)
 {
     fprintf(stderr, "Error: %s\n", description);
 }
 
+Window::Window() {
+
+}
+
 Window::Window(std::vector<Window> &otherWindows, int size, int screenW, int screenH, int speed)
     : movingRight(true), width(size), height(size), screenHeight(screenH), screenWidth(screenW),
       posX((100 * rand()) % (screenW - size)), posY(0), speed(speed), otherWindows(otherWindows)
 {
-    window = glfwCreateWindow(width, height, "OpenGL Triangle", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Box", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -71,6 +76,16 @@ void Window::fall()
     {
         if (posX + width <= w.getX() || posX >= w.getX() + w.getWX())
             continue;
-        floor = std::max(floor, w.getY());
+        floor = std::min(floor, w.getY());
+    }
+
+    floor -= height;
+
+    while (posY < floor)
+    {
+        posY+=speed;
+        // printf("%d %d\n", posY, floor);
+        glfwSetWindowPos(window, posX, posY);
+        usleep(1000000 / 50);
     }
 }

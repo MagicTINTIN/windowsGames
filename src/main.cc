@@ -8,6 +8,12 @@
 
 #include "window.hh"
 
+std::vector<Window> windows;
+Window currentWindow;
+GLFWwindow *window;
+int screenW, screenH;
+int speed;
+
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -15,18 +21,14 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
-        speed += 10;
+        speed += 1;
+        currentWindow.fall();
         windows.push_back(currentWindow);
         currentWindow = Window(windows, 100, screenW, screenH, speed);
         window = currentWindow.getWindow();
+        glfwSetKeyCallback(window, key_callback);
     }
 }
-
-std::vector<Window> windows;
-Window currentWindow;
-GLFWwindow *window;
-int screenW, screenH;
-int speed;
 
 int main(void)
 {
@@ -58,11 +60,11 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(1.0f, 0.2f, 0.0f, 1.0f);
 
         // glUseProgram(program);
         // glBindVertexArray(vertex_array);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
-
         glfwSwapBuffers(window);
         glfwPollEvents();
 
