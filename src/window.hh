@@ -16,11 +16,11 @@ private:
     GLFWwindow* window;
     int height, width, posX, posY, screenWidth, screenHeight, speed;
     bool movingRight;
-    std::vector<Window> otherWindows;
+    std::vector<Window*> otherWindows;
 public:
     GLFWwindow* getWindow();
     Window();
-    Window(std::vector<Window> &otherWindows, int size, int screenW, int screenH, int speed);
+    Window(std::vector<Window*> &otherWindows, int size, int screenW, int screenH, int speed);
     ~Window();
     void horizontalMove();
     void fall();

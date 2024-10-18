@@ -10,7 +10,7 @@ Window::Window() {
 
 }
 
-Window::Window(std::vector<Window> &otherWindows, int size, int screenW, int screenH, int speed)
+Window::Window(std::vector<Window*> &otherWindows, int size, int screenW, int screenH, int speed)
     : movingRight(true), width(size), height(size), screenHeight(screenH), screenWidth(screenW),
       posX((100 * rand()) % (screenW - size)), posY(0), speed(speed), otherWindows(otherWindows)
 {
@@ -21,8 +21,16 @@ Window::Window(std::vector<Window> &otherWindows, int size, int screenW, int scr
         exit(1);
     }
 
+
     glfwMakeContextCurrent(window);
-    gladLoadGL();        // Load openGL function /!\ Can only be done AFTER making a valid window with an openGL context
+
+    int left, top, right, bottom;
+    glfwGetWindowFrameSize(window, &left, &top, &right, &bottom);
+    printf("%d %d %d %d\n", left, top, right, bottom);
+    width += right + left;
+    height += bottom + top;
+
+    // gladLoadGL();        // Load openGL function /!\ Can only be done AFTER making a valid window with an openGL context
     glfwSwapInterval(1); // Vsynch
 }
 
@@ -72,11 +80,11 @@ int Window::getWX()
 void Window::fall()
 {
     int floor = screenHeight;
-    for (Window &w : otherWindows)
+    for (Window* &w : otherWindows)
     {
-        if (posX + width <= w.getX() || posX >= w.getX() + w.getWX())
+        if (posX + width <= w->getX() || posX >= w->getX() + w->getWX())
             continue;
-        floor = std::min(floor, w.getY());
+        floor = std::min(floor, w->getY());
     }
 
     floor -= height;

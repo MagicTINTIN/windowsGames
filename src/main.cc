@@ -8,11 +8,12 @@
 
 #include "window.hh"
 
-std::vector<Window> windows;
-Window currentWindow;
+std::vector<Window*> windows;
+Window *currentWindow;
 GLFWwindow *window;
 int screenW, screenH;
 int speed;
+int size;
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
@@ -22,10 +23,11 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
         speed += 1;
-        currentWindow.fall();
+        size = 0.8 * size + 5;
+        currentWindow->fall();
         windows.push_back(currentWindow);
-        currentWindow = Window(windows, 100, screenW, screenH, speed);
-        window = currentWindow.getWindow();
+        *currentWindow = Window(windows, size, screenW, screenH, speed);
+        window = currentWindow->getWindow();
         glfwSetKeyCallback(window, key_callback);
     }
 }
@@ -51,16 +53,18 @@ int main(void)
     screenH = mode->height;
     screenW = mode->width;
 
-    speed = 10;
+    speed = 9;
+    size = 150;
 
-    currentWindow = Window(windows, 100, screenW, screenH, speed);
-    window = currentWindow.getWindow();
+    Window cwin = Window(windows, size, screenW, screenH, speed);
+    currentWindow = &cwin;
+    window = currentWindow->getWindow();
 
     glfwSetKeyCallback(window, key_callback);
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(1.0f, 0.2f, 0.0f, 1.0f);
+        // glClear(GL_COLOR_BUFFER_BIT);
+        // glClearColor(1.0f, 0.2f, 0.0f, 1.0f);
 
         // glUseProgram(program);
         // glBindVertexArray(vertex_array);
@@ -68,7 +72,7 @@ int main(void)
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        currentWindow.horizontalMove();
+        currentWindow->horizontalMove();
     }
 
     glfwDestroyWindow(window);
