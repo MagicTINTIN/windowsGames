@@ -9,12 +9,12 @@
 #include "window.hh"
 
 std::vector<Window> windows;
-std::vector<Window*> windowPtrs;
 Window *currentWindow;
 GLFWwindow *window;
 int screenW, screenH;
 int speed;
 int size;
+int ID;
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
@@ -26,9 +26,9 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         speed += 1;
         size = 0.8 * size + 5;
         currentWindow->fall();
-        windowPtrs.push_back(currentWindow);
+        // windowPtrs.push_back(currentWindow);
         //  = Window(windowPtrs, size, screenW, screenH, speed);
-        windows.push_back(Window(windowPtrs, size, screenW, screenH, speed));
+        windows.push_back(Window(&windows, size, screenW, screenH, speed, ID++));
         currentWindow = &(windows.back());
         window = currentWindow->getWindow();
         glfwSetKeyCallback(window, key_callback);
@@ -56,10 +56,11 @@ int main(void)
     screenH = mode->height;
     screenW = mode->width;
 
+    ID = 0;
     speed = 9;
     size = 150;
 
-    windows.push_back(Window(windowPtrs, size, screenW, screenH, speed));
+    windows.push_back(Window(&windows, size, screenW, screenH, speed, ID++));
     currentWindow = &(windows.back());
     window = currentWindow->getWindow();
 

@@ -10,9 +10,9 @@ Window::Window() {
 
 }
 
-Window::Window(std::vector<Window*> &otherWindows, int size, int screenW, int screenH, int speed)
+Window::Window(std::vector<Window> *otherWindows, int size, int screenW, int screenH, int speed, int ID)
     : movingRight(true), width(size), height(size), screenHeight(screenH), screenWidth(screenW),
-      posX((100 * rand()) % (screenW - size)), posY(0), speed(speed), otherWindows(otherWindows)
+      posX((100 * rand()) % (screenW - size)), posY(0), speed(speed), otherWindows(otherWindows), ID(ID)
 {
     window = glfwCreateWindow(width, height, "Box", NULL, NULL);
     if (!window)
@@ -26,9 +26,10 @@ Window::Window(std::vector<Window*> &otherWindows, int size, int screenW, int sc
 
     int left, top, right, bottom;
     glfwGetWindowFrameSize(window, &left, &top, &right, &bottom);
-    printf("%d %d %d %d\n", left, top, right, bottom);
-    width += right + left;
-    height += bottom + top;
+    frameWidth = right + left;
+    if (top == 0) top = 15;
+    frameHeight = bottom + top;
+    printf("%d %d %d %d > [ID:%d] w:%d gwx:%d fh:%d\n", left, top, right, bottom, ID, width, getWX(), getYWithFrameHeight());
 
     // gladLoadGL();        // Load openGL function /!\ Can only be done AFTER making a valid window with an openGL context
     glfwSwapInterval(1); // Vsynch
@@ -72,21 +73,33 @@ int Window::getY()
     return posY;
 }
 
+int Window::getYWithFrameHeight()
+{
+    return posY - frameHeight;
+}
+
 int Window::getWX()
 {
-    return width;
+    return frameWidth + width;
+}
+
+int Window::getID()
+{
+    return ID;
 }
 
 void Window::fall()
 {
     int floor = screenHeight;
-    for (Window* &w : otherWindows)
+    for (Window &w : *otherWindows)
     {
-        printf("\npx:%d wx:%d | d: px:%d wx:%d", posX, width, w->getX(), w->getWX());
-        if (posX + width <= w->getX() || posX >= w->getX() + w->getWX())
+        if (w.getID() == otherWindows->back().getID())
             continue;
-        printf("floor:%d ny:%d", floor, w->getY());
-        floor = std::min(floor, w->getY());
+        printf("\npx:%d wx:%d | [ID=%d] d: px:%d wx:%d > ", posX, width, w.getID(), w.getX(), w.getWX());
+        if (posX + width <= w.getX() || posX >= w.getX() + w.getWX())
+            continue;
+        printf("floor:%d ny:%d nf:%d", floor, w.getYWithFrameHeight(), std::min(floor, w.getYWithFrameHeight()));
+        floor = std::min(floor, w.getYWithFrameHeight());
     }
     printf("\n --- END ---\n");
 

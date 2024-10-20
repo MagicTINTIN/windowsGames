@@ -14,17 +14,20 @@ class Window
 {
 private:
     GLFWwindow* window;
-    int height, width, posX, posY, screenWidth, screenHeight, speed;
+    int ID, height, width, posX, posY, screenWidth, screenHeight, speed;
+    int frameHeight, frameWidth;
     bool movingRight;
-    std::vector<Window*> otherWindows;
+    std::vector<Window> *otherWindows;
 public:
     GLFWwindow* getWindow();
     Window();
-    Window(std::vector<Window*> &otherWindows, int size, int screenW, int screenH, int speed);
+    Window(std::vector<Window> *otherWindows, int size, int screenW, int screenH, int speed, int ID);
     ~Window();
     void horizontalMove();
     void fall();
     int getX();
     int getY();
+    int getYWithFrameHeight();
     int getWX();
+    int getID();
 };
