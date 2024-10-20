@@ -8,7 +8,8 @@
 
 #include "window.hh"
 
-std::vector<Window*> windows;
+std::vector<Window> windows;
+std::vector<Window*> windowPtrs;
 Window *currentWindow;
 GLFWwindow *window;
 int screenW, screenH;
@@ -25,8 +26,10 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         speed += 1;
         size = 0.8 * size + 5;
         currentWindow->fall();
-        windows.push_back(currentWindow);
-        *currentWindow = Window(windows, size, screenW, screenH, speed);
+        windowPtrs.push_back(currentWindow);
+        //  = Window(windowPtrs, size, screenW, screenH, speed);
+        windows.push_back(Window(windowPtrs, size, screenW, screenH, speed));
+        currentWindow = &(windows.back());
         window = currentWindow->getWindow();
         glfwSetKeyCallback(window, key_callback);
     }
@@ -56,8 +59,8 @@ int main(void)
     speed = 9;
     size = 150;
 
-    Window cwin = Window(windows, size, screenW, screenH, speed);
-    currentWindow = &cwin;
+    windows.push_back(Window(windowPtrs, size, screenW, screenH, speed));
+    currentWindow = &(windows.back());
     window = currentWindow->getWindow();
 
     glfwSetKeyCallback(window, key_callback);
