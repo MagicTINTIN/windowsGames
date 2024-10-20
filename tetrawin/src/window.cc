@@ -95,13 +95,13 @@ void Window::fall()
     {
         if (w.getID() == otherWindows->back().getID())
             continue;
-        // printf("\npx:%d wx:%d | [ID=%d] d: px:%d wx:%d > ", posX, width, w.getID(), w.getX(), w.getWX());
+        printf("\npx:%d wx:%d | [ID=%d] d: px:%d wx:%d > ", posX, width, w.getID(), w.getX(), w.getWX());
         if (posX + width <= w.getX() || posX >= w.getX() + w.getWX())
             continue;
-        // printf("floor:%d ny:%d nf:%d", floor, w.getYWithFrameHeight(), std::min(floor, w.getYWithFrameHeight()));
+        printf("floor:%d ny:%d nf:%d", floor, w.getYWithFrameHeight(), std::min(floor, w.getYWithFrameHeight()));
         floor = std::min(floor, w.getYWithFrameHeight());
     }
-    // printf("\n --- END ---\n");
+    printf("\n --- END ---\n");
 
     floor -= height;
 
