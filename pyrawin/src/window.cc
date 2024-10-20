@@ -82,10 +82,13 @@ void Window::fall()
     int floor = screenHeight;
     for (Window* &w : otherWindows)
     {
+        printf("\npx:%d wx:%d | d: px:%d wx:%d", posX, width, w->getX(), w->getWX());
         if (posX + width <= w->getX() || posX >= w->getX() + w->getWX())
             continue;
+        printf("floor:%d ny:%d", floor, w->getY());
         floor = std::min(floor, w->getY());
     }
+    printf("\n --- END ---\n");
 
     floor -= height;
 
