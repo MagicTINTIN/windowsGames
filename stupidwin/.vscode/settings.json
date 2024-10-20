@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "h_hostfile": "plaintext",
+        "cstdlib": "cpp"
+    }
+}
