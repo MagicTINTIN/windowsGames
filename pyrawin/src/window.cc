@@ -6,12 +6,13 @@ void error_callback(int error, const char *description)
     fprintf(stderr, "Error: %s\n", description);
 }
 
-Window::Window() {
-
+Window::Window()
+{
 }
 
+
 Window::Window(std::vector<Window> *otherWindows, int size, int screenW, int screenH, int speed, int ID)
-    : movingRight(true), width(size), height(size), screenHeight(screenH), screenWidth(screenW),
+    : movingRight(true), width(size), height(size), screenHeight(screenH), screenWidth(screenW), falling(false),
       posX((100 * rand()) % (screenW - size)), posY(0), speed(speed), otherWindows(otherWindows), ID(ID)
 {
     window = glfwCreateWindow(width, height, "Box", NULL, NULL);
@@ -21,13 +22,13 @@ Window::Window(std::vector<Window> *otherWindows, int size, int screenW, int scr
         exit(1);
     }
 
-
     glfwMakeContextCurrent(window);
 
     int left, top, right, bottom;
     glfwGetWindowFrameSize(window, &left, &top, &right, &bottom);
     frameWidth = right + left;
-    if (top == 0) top = 15;
+    if (top == 0)
+        top = 15;
     frameHeight = bottom + top;
     printf("%d %d %d %d > [ID:%d] w:%d gwx:%d fh:%d\n", left, top, right, bottom, ID, width, getWX(), getYWithFrameHeight());
 
@@ -88,12 +89,30 @@ int Window::getID()
     return ID;
 }
 
+bool Window::getFalling()
+{
+    return falling;
+}
+
+void Window::updatePos(int x, int y)
+{
+    posX = x;
+    posY = y;
+}
+
+void Window::setFalling(bool v)
+{
+    falling = v;
+}
+
+
 void Window::fall()
 {
+    falling = true;
     int floor = screenHeight;
     for (Window &w : *otherWindows)
     {
-        if (w.getID() == otherWindows->back().getID())
+        if (w.getID() == w.getID())
             continue;
         printf("\npx:%d wx:%d | [ID=%d] d: px:%d wx:%d > ", posX, width, w.getID(), w.getX(), w.getWX());
         if (posX + width <= w.getX() || posX >= w.getX() + w.getWX())
@@ -107,11 +126,13 @@ void Window::fall()
 
     while (posY < floor)
     {
-        posY+=speed;
-        if (posY >= floor) posY = floor;
+        posY += speed;
+        if (posY >= floor)
+            posY = floor;
         // printf("%d %d\n", posY, floor);
         glfwSetWindowPos(window, posX, posY);
         usleep(1000000 / 50);
-        speed+=2;
+        speed += 2;
     }
+    falling = false;
 }

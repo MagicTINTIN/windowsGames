@@ -18,6 +18,8 @@ private:
     int frameHeight, frameWidth;
     bool movingRight;
     std::vector<Window> *otherWindows;
+    bool falling;
+    void setFalling(bool v);
 public:
     GLFWwindow* getWindow();
     Window();
@@ -30,4 +32,6 @@ public:
     int getYWithFrameHeight();
     int getWX();
     int getID();
+    bool getFalling();
+    void updatePos(int x, int y);
 };

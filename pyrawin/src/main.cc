@@ -16,6 +16,20 @@ int speed;
 int size;
 int ID;
 
+void move_callback(GLFWwindow *window, int x, int y)
+{
+    for (Window &w : windows)
+    {
+        if (w.getWindow() == window)
+        {
+            if (w.getFalling()) break;
+            w.updatePos(x, y);
+            w.fall();
+            break;
+        }
+    }
+}
+
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -26,8 +40,10 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         speed += 1;
         size = 0.8 * size + 5;
         currentWindow->fall();
+
         // windowPtrs.push_back(currentWindow);
         //  = Window(windowPtrs, size, screenW, screenH, speed);
+        glfwSetWindowPosCallback(window, move_callback);
         windows.push_back(Window(&windows, size, screenW, screenH, speed, ID++));
         currentWindow = &(windows.back());
         window = currentWindow->getWindow();
