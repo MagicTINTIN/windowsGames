@@ -104,6 +104,7 @@ int main(int argc, char const *argv[])
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     GLFWwindow *window = glfwCreateWindow(sizeX, sizeY, "Stupid Window", nullptr, nullptr);
     if (!window)
@@ -123,7 +124,7 @@ int main(int argc, char const *argv[])
     {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        const float ratio = width / (float)height;
+        // const float ratio = width / (float)height;
 
         if (keys[GLFW_KEY_LEFT_SHIFT])
             adjustSize(window);
