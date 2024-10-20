@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "window.hh"
+#include "object.hh"
 
 std::vector<Window> windows;
 Window *currentWindow;
@@ -56,7 +57,21 @@ int main(void)
     screenH = mode->height;
     screenW = mode->width;
 
-    printf("CUBE SIZE: %d\n", screenW/10);
+    printf("CUBE SIZE: %d\n", screenW / 10);
+    for (size_t s = 0; s < 7; s++)
+    {
+        for (size_t o = 0; o < 4; o++)
+        {
+            for (size_t c = 0; c < 16; c++)
+            {
+                printf("%c", SHAPES[s][o][c] ? '#' : ' ');
+                if (c%4==3) printf("\n");
+            }
+            printf("\n");
+        }
+        printf("--------------------------\n");
+    }
+
     return 0;
 
     ID = 0;
