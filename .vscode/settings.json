@@ -94,7 +94,5 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp"
-    },
-    "C_Cpp.default.compilerPath": "/usr/bin/g++",
-    "cmake.sourceDirectory": "/home/user/Documents/code/cpp/pirawin/pyrawin"
+    }
 }
